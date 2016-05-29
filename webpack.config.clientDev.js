@@ -10,7 +10,7 @@ import path from 'path';
 const clientDevConfig = mergeConfig(baseConfig, {
   entry: [
     'webpack-hot-middleware/client',
-    './index'
+    './app/index'
   ],
   output: {
     path: path.resolve(__dirname, 'build'),
