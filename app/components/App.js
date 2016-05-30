@@ -3,12 +3,7 @@ import { Route, Link } from 'react-router';
 
 import { Provider, connect } from 'react-redux';
 
-import {
-		ReduxRouter,
-		routerStateReducer,
-		reduxReactRouter,
-		push,
-} from 'redux-router';
+
 
 import * as JobsActions from '../actions';
 
@@ -29,13 +24,12 @@ class App extends Component {
 		console.log(typeof  dispatch, this.props);
 		dispatch(JobsActions.createJob('Abcde' + Math.random()));
 
-		dispatch(push({ pathname: '/parent/child/custom' }));
 	}
 
 	render() {
 		// Display is only used for rendering, its not a property of <Link>
 		const links = [
-			{ pathname: '/', display: '/'},
+			//{ pathname: '/', display: '/'},
 			{ pathname: '/jobs', display: '职位列表'},
 			{ pathname: '/add', display: '新增职位'},
 			//{ pathname: '/parent', query: { foo: 'bar' }, display: '/parent?foo=bar'},

@@ -16,8 +16,6 @@ webpackJsonp([0],[
 
 	var _redux = __webpack_require__(159);
 
-	var _reduxRouter = __webpack_require__(172);
-
 	var _reactRouter = __webpack_require__(189);
 
 	var _reactRedux = __webpack_require__(176);
@@ -6273,18 +6271,11 @@ webpackJsonp([0],[
 
 	var _reduxDevtoolsLibReact = __webpack_require__(260);
 
-	//import { createHistory } from 'history';
-	//import { Route, Link } from 'react-router';
-
-	var _reduxRouter = __webpack_require__(172);
-
 	// 自定义 router
 
 	var _reactRouter = __webpack_require__(189);
 
-	var _historyLibCreateHashHistory = __webpack_require__(198);
-
-	var _historyLibCreateHashHistory2 = _interopRequireDefault(_historyLibCreateHashHistory);
+	var _history = __webpack_require__(401);
 
 	var _App = __webpack_require__(406);
 
@@ -6310,9 +6301,7 @@ webpackJsonp([0],[
 
 	var _storeStore2 = _interopRequireDefault(_storeStore);
 
-	var history = _historyLibCreateHashHistory2['default']({
-		queryKey: false
-	});
+	var appHistory = _reactRouter.useRouterHistory(_history.createHashHistory)({ queryKey: false });
 
 	var store = _storeStore2['default']();
 
@@ -6334,10 +6323,11 @@ webpackJsonp([0],[
 					{ store: store },
 					_react2['default'].createElement(
 						_reactRouter.Router,
-						{ history: history },
+						{ history: appHistory },
 						_react2['default'].createElement(
 							_reactRouter.Route,
 							{ path: '/', component: _App2['default'] },
+							_react2['default'].createElement(_reactRouter.IndexRedirect, { to: 'jobs' }),
 							_react2['default'].createElement(_reactRouter.Route, { path: 'jobs', component: _JobListP2['default'] }),
 							_react2['default'].createElement(_reactRouter.Route, { path: 'add', component: _containersAddPage2['default'] })
 						)
@@ -6385,8 +6375,6 @@ webpackJsonp([0],[
 
 	var _reactRedux = __webpack_require__(176);
 
-	var _reduxRouter = __webpack_require__(172);
-
 	var _actions = __webpack_require__(407);
 
 	var JobsActions = _interopRequireWildcard(_actions);
@@ -6415,13 +6403,13 @@ webpackJsonp([0],[
 
 			console.log(typeof dispatch, this.props);
 			dispatch(JobsActions.createJob('Abcde' + Math.random()));
-
-			dispatch(_reduxRouter.push({ pathname: '/parent/child/custom' }));
 		};
 
 		App.prototype.render = function render() {
 			// Display is only used for rendering, its not a property of <Link>
-			var links = [{ pathname: '/', display: '/' }, { pathname: '/jobs', display: '职位列表' }, { pathname: '/add', display: '新增职位' }].
+			var links = [
+			//{ pathname: '/', display: '/'},
+			{ pathname: '/jobs', display: '职位列表' }, { pathname: '/add', display: '新增职位' }].
 			//{ pathname: '/parent', query: { foo: 'bar' }, display: '/parent?foo=bar'},
 			//{ pathname: '/parent/child', query: { bar: 'baz' }, display: '/parent/child?bar=baz'},
 			//{ pathname: '/parent/child/123', query: { baz: 'foo' }, display: '/parent/child/123?baz=foo'}
