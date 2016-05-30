@@ -6338,8 +6338,8 @@ webpackJsonp([0],[
 						_react2['default'].createElement(
 							_reactRouter.Route,
 							{ path: '/', component: _App2['default'] },
-							_react2['default'].createElement(_reactRouter.Route, { path: '#/jobs', component: _JobListP2['default'] }),
-							_react2['default'].createElement(_reactRouter.Route, { path: '#/add', component: _containersAddPage2['default'] })
+							_react2['default'].createElement(_reactRouter.Route, { path: 'jobs', component: _JobListP2['default'] }),
+							_react2['default'].createElement(_reactRouter.Route, { path: 'add', component: _containersAddPage2['default'] })
 						)
 					)
 				),

@@ -41,8 +41,8 @@ class Root extends Component {
 					<Provider store={store}>
 						<Router history={history}>
 							<Route path="/" component={App} >
-								<Route path="#/jobs" component={Joblist}></Route>
-								<Route path="#/add" component={AddPage}></Route>
+								<Route path="jobs" component={Joblist}></Route>
+								<Route path="add" component={AddPage}></Route>
 							</Route>
 						</Router>
 
