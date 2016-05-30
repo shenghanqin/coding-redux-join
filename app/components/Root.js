@@ -6,14 +6,21 @@ import { Provider, connect } from 'react-redux';
 import { devTools } from 'redux-devtools';
 import { DevTools, DebugPanel, LogMonitor } from 'redux-devtools/lib/react';
 
-import { createHistory } from 'history';
-import { Route, Link } from 'react-router';
+//import { createHistory } from 'history';
+//import { Route, Link } from 'react-router';
 import {
 	ReduxRouter,
 	routerStateReducer,
 	reduxReactRouter,
 	push,
 } from 'redux-router';
+
+// 自定义 router
+import {Router, Route, IndexRedirect} from 'react-router';
+import createHistory from 'history/lib/createHashHistory';
+const history = createHistory({
+	queryKey: false
+});
 
 
 
@@ -32,12 +39,13 @@ class Root extends Component {
 		return (
 				<div>
 					<Provider store={store}>
-						<ReduxRouter>
-							<Route path="/" component={App}>
-								<Route path="jobs" component={Joblist}></Route>
-								<Route path="add" component={AddPage}></Route>
+						<Router history={history}>
+							<Route path="/" component={App} >
+								<Route path="#/jobs" component={Joblist}></Route>
+								<Route path="#/add" component={AddPage}></Route>
 							</Route>
-						</ReduxRouter>
+						</Router>
+
 					</Provider>
 					<DebugPanel top right bottom>
 						<DevTools store={store} monitor={LogMonitor} />

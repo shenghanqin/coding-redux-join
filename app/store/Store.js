@@ -23,7 +23,7 @@ import {
 export default function configureStore(initialState) {
 	const store = compose(
 		applyMiddleware(thunkMiddleware),
-		reduxReactRouter({ createHistory }),
+		//reduxReactRouter({ createHistory }),
 		devTools()
 	)(createStore)(reducer);
 

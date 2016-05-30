@@ -6273,11 +6273,18 @@ webpackJsonp([0],[
 
 	var _reduxDevtoolsLibReact = __webpack_require__(260);
 
-	var _history = __webpack_require__(401);
+	//import { createHistory } from 'history';
+	//import { Route, Link } from 'react-router';
+
+	var _reduxRouter = __webpack_require__(172);
+
+	// 自定义 router
 
 	var _reactRouter = __webpack_require__(189);
 
-	var _reduxRouter = __webpack_require__(172);
+	var _historyLibCreateHashHistory = __webpack_require__(198);
+
+	var _historyLibCreateHashHistory2 = _interopRequireDefault(_historyLibCreateHashHistory);
 
 	var _App = __webpack_require__(406);
 
@@ -6303,6 +6310,10 @@ webpackJsonp([0],[
 
 	var _storeStore2 = _interopRequireDefault(_storeStore);
 
+	var history = _historyLibCreateHashHistory2['default']({
+		queryKey: false
+	});
+
 	var store = _storeStore2['default']();
 
 	var Root = (function (_Component) {
@@ -6322,13 +6333,13 @@ webpackJsonp([0],[
 					_reactRedux.Provider,
 					{ store: store },
 					_react2['default'].createElement(
-						_reduxRouter.ReduxRouter,
-						null,
+						_reactRouter.Router,
+						{ history: history },
 						_react2['default'].createElement(
 							_reactRouter.Route,
 							{ path: '/', component: _App2['default'] },
-							_react2['default'].createElement(_reactRouter.Route, { path: 'jobs', component: _JobListP2['default'] }),
-							_react2['default'].createElement(_reactRouter.Route, { path: 'add', component: _containersAddPage2['default'] })
+							_react2['default'].createElement(_reactRouter.Route, { path: '#/jobs', component: _JobListP2['default'] }),
+							_react2['default'].createElement(_reactRouter.Route, { path: '#/add', component: _containersAddPage2['default'] })
 						)
 					)
 				),
@@ -18497,7 +18508,9 @@ webpackJsonp([0],[
 	var _reduxRouter = __webpack_require__(172);
 
 	function configureStore(initialState) {
-		var store = _redux.compose(_redux.applyMiddleware(_reduxThunk2['default']), _reduxRouter.reduxReactRouter({ createHistory: _history.createHistory }), _reduxDevtools.devTools())(_redux.createStore)(_reducersReducers2['default']);
+		var store = _redux.compose(_redux.applyMiddleware(_reduxThunk2['default']),
+		//reduxReactRouter({ createHistory }),
+		_reduxDevtools.devTools())(_redux.createStore)(_reducersReducers2['default']);
 
 		return store;
 	}
@@ -18553,7 +18566,7 @@ webpackJsonp([0],[
 	var _jobs2 = _interopRequireDefault(_jobs);
 
 	var reducer = _redux.combineReducers({
-		router: _reduxRouter.routerStateReducer,
+		//router: routerStateReducer,
 		jobs: _jobs2['default']
 	});
 

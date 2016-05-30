@@ -10,7 +10,7 @@ import {
 // 自定义 reducers
 import jobsStateReducer from './jobs';
 const reducer = combineReducers({
-	router: routerStateReducer,
+	//router: routerStateReducer,
 	jobs: jobsStateReducer
 });
 
