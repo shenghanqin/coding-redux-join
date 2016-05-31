@@ -1,6 +1,6 @@
 import express from 'express';
 import webpack from 'webpack';
-import config from './webpack.config.clientDev';
+import config from './webpack.config.clientDev.js';
 import path from 'path';
 
 import webpackDevMiddleware from 'webpack-dev-middleware';
@@ -17,7 +17,7 @@ app.use(webpackDevMiddleware(compiler, {
 app.use(webpackHotMiddleware(compiler));
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  res.sendFile(path.join(__dirname, 'app/index.html'));
 });
 
 app.listen(3000, 'localhost', error => {

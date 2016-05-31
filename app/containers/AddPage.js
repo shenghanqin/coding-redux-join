@@ -3,9 +3,9 @@
  */
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux';
-
-
 import * as JobsActions from '../actions';
+
+import { Forms, FormGroup, ControlLabel, FormControl, HelpBlock} from 'react-bootstrap';
 
 
 class AddPage extends Component {
@@ -31,7 +31,22 @@ class AddPage extends Component {
 		return (
 			<div>
 				{'AddPage Now'}
-				<a href="#" onClick={this.handleClick}>新增职位 按钮</a>
+				<form>
+					<FormGroup
+							controlId="formBasicText"
+
+					>
+						<ControlLabel>Working example with validation</ControlLabel>
+						<FormControl
+								type="text"
+
+								placeholder="Enter text"
+								onChange={this.handleChange}
+						/>
+						<FormControl.Feedback />
+						<HelpBlock>Validation is based on string length.</HelpBlock>
+					</FormGroup>
+				</form>
 			</div>
 		)
 	}

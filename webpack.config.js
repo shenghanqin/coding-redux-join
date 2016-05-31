@@ -1,14 +1,17 @@
 var path = require('path');
 var webpack = require('webpack');
 
+var HtmlWebpackPlugin = require('html-webpack-plugin')
+
 module.exports = {
-	entry: {
-		app:path.join(__dirname, 'app'),
-		vendors: ['react','redux', 'redux-router']
-	},
+	//entry: {
+	//	app:path.join(__dirname, 'app'),
+	//	vendors: ['react','redux', 'redux-router']
+	//},
+	entry: ['react','redux', 'redux-router', path.join(__dirname, 'app')],
 	output: {
-		path: path.join(__dirname, 'dist'),
-		filename: '[name].js'
+		path: path.join(__dirname, 'static'),
+		filename: 'bundle.js'
 	},
 	module: {
 		loaders: [
@@ -29,7 +32,13 @@ module.exports = {
 		new webpack.NoErrorsPlugin(),
 		//这个使用uglifyJs压缩你的js代码
 		//new webpack.optimize.UglifyJsPlugin({minimize: true}),
-		new webpack.optimize.CommonsChunkPlugin('vendors', 'vendors.js')
+		//new webpack.optimize.CommonsChunkPlugin('vendors', 'vendors.js'),
+		new HtmlWebpackPlugin({
+			title: 'My App',
+			filename: '../index.html',
+			template: 'app/index.html',
+			inject: false
+		})
 	]
 };
 

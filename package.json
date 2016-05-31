@@ -24,6 +24,7 @@
     "eslint-plugin-react": "^3.3.1",
     "express": "^4.13.3",
     "history": "^2.0.0",
+    "html-webpack-plugin": "^2.19.0",
     "jsdom": "^5.6.0",
     "lodash": "^3.10.1",
     "mocha": "^2.2.5",
@@ -51,6 +52,7 @@
     "wilddog": "^0.6.4"
   },
   "dependencies": {
-    "deep-equal": "^1.0.1"
+    "deep-equal": "^1.0.1",
+    "react-bootstrap": "^0.29.4"
   }
 }
