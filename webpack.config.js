@@ -9,26 +9,26 @@ const PROJECT_SRC = path.resolve(__dirname, './src');
 
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
-const babelrc = fs.readFileSync(path.join('.', '.babelrc'));
-var babelLoaderQuery = {};
-
-
-try {
-	babelLoaderQuery = JSON.parse(babelrc);
-} catch (err) {
-	console.error('Error parsing .babelrc.');
-	console.error(err);
-}
-babelLoaderQuery.plugins = babelLoaderQuery.plugins || [];
-babelLoaderQuery.plugins.push('react-transform');
-babelLoaderQuery.extra = babelLoaderQuery.extra || {};
-babelLoaderQuery.extra['react-transform'] = {
-	transforms: [{
-		transform: 'react-transform-hmr',
-		imports: ['react'],
-		locals: ['module']
-	}]
-};
+//const babelrc = fs.readFileSync(path.join('.', '.babelrc'));
+//var babelLoaderQuery = {};
+//
+//
+//try {
+//	babelLoaderQuery = JSON.parse(babelrc);
+//} catch (err) {
+//	console.error('Error parsing .babelrc.');
+//	console.error(err);
+//}
+//babelLoaderQuery.plugins = babelLoaderQuery.plugins || [];
+//babelLoaderQuery.plugins.push('react-transform');
+//babelLoaderQuery.extra = babelLoaderQuery.extra || {};
+//babelLoaderQuery.extra['react-transform'] = {
+//	transforms: [{
+//		transform: 'react-transform-hmr',
+//		imports: ['react'],
+//		locals: ['module']
+//	}]
+//};
 
 module.exports = {
 	//entry: {
