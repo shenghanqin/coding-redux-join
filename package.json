@@ -4,8 +4,10 @@
   "description": "",
   "main": "server.js",
   "scripts": {
+    "build": "webpack",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node -r babel/register server.js"
+    "start": "node -r babel/register server.js",
+    "dev": "webpack-dev-server --host 0.0.0.0 --port 8888 --devtool eval --progress --colors --hot --inline --content-base build"
   },
   "author": "Chilligo Sheng <shenghanqin@163.com>",
   "license": "MIT",
@@ -48,6 +50,7 @@
     "sinon": "^1.15.4",
     "webpack": "^1.12.1",
     "webpack-dev-middleware": "^1.2.0",
+    "webpack-dev-server": "^1.14.1",
     "webpack-hot-middleware": "^2.0.0",
     "wilddog": "^0.6.4"
   },

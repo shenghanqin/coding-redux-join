@@ -1,7 +1,34 @@
 var path = require('path');
 var webpack = require('webpack');
 
-var HtmlWebpackPlugin = require('html-webpack-plugin')
+// custom
+var fs = require('fs');
+
+
+const PROJECT_SRC = path.resolve(__dirname, './src');
+
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+
+const babelrc = fs.readFileSync(path.join('.', '.babelrc'));
+var babelLoaderQuery = {};
+
+
+try {
+	babelLoaderQuery = JSON.parse(babelrc);
+} catch (err) {
+	console.error('Error parsing .babelrc.');
+	console.error(err);
+}
+babelLoaderQuery.plugins = babelLoaderQuery.plugins || [];
+babelLoaderQuery.plugins.push('react-transform');
+babelLoaderQuery.extra = babelLoaderQuery.extra || {};
+babelLoaderQuery.extra['react-transform'] = {
+	transforms: [{
+		transform: 'react-transform-hmr',
+		imports: ['react'],
+		locals: ['module']
+	}]
+};
 
 module.exports = {
 	//entry: {
@@ -13,18 +40,30 @@ module.exports = {
 		path: path.join(__dirname, 'static'),
 		filename: 'bundle.js'
 	},
+	//module: {
+	//	loaders: [
+	//		{
+	//			test:/\.js?$/,
+	//			exclude:/node_modules/,
+	//			loader:'babel'
+	//			//,
+	//			//query:{
+	//			//	presets:['react','es2015']
+	//			//}
+	//		}
+	//	]
+	//},
 	module: {
-		loaders: [
-			{
-				test:/\.js?$/,
-				exclude:/node_modules/,
-				loader:'babel'
-				//,
-				//query:{
-				//	presets:['react','es2015']
-				//}
-			}
-		]
+		loaders: [{
+			test: /\.js$/,
+			loader: 'babel',
+			query: babelLoaderQuery,
+			exclude: path.resolve(__dirname, 'node_modules'),
+			include: [
+				path.resolve(__dirname),
+				PROJECT_SRC
+			]
+		}]
 	},
 	plugins: [
 		// kills the compilation upon an error.

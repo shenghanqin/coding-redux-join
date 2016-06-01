@@ -5,7 +5,7 @@ import { Provider, connect } from 'react-redux';
 
 
 
-import * as JobsActions from '../actions';
+import * as JobsActions from '../actions/actions';
 
 import { Nav, Navbar, NavItem, NavDropdown, MenuItem} from 'react-bootstrap';
 
@@ -48,13 +48,19 @@ class App extends Component {
 							<Navbar.Brand>
 								<a href="#">React - 加入我们</a>
 							</Navbar.Brand>
+							<Navbar.Toggle />
 						</Navbar.Header>
-						<Nav>
-							{links}
-							<NavDropdown eventKey={3} title="小溪里" id="basic-nav-dropdown">
-								<MenuItem eventKey={3.1} href="http://www.xiaoxili.com/">个人博客</MenuItem>
-							</NavDropdown>
-						</Nav>
+						<Navbar.Collapse>
+							<Nav>
+								{links}
+
+							</Nav>
+							<Nav pullRight>
+								<NavDropdown eventKey={3} title="小溪里的作品" id="basic-nav-dropdown">
+									<MenuItem eventKey={3.1} href="http://www.xiaoxili.com/">个人博客</MenuItem>
+								</NavDropdown>
+							</Nav>
+						</Navbar.Collapse>
 					</Navbar>
 					{this.props.children}
 				</div>

@@ -18,12 +18,16 @@ const appHistory = useRouterHistory(createHashHistory)({ queryKey: false })
 import App from './App';
 import Parent from './Parent';
 import Child from './Child';
-import Joblist from './JobListP';
+import Joblist from './../containers/ListPage';
 import AddPage from '../containers/AddPage';
 
 import configureStore from '../store/Store';
 
+import { registerListeners} from '../actions/actions'
+
 const store = configureStore();
+
+store.dispatch(registerListeners());
 
 class Root extends Component {
 	render() {
