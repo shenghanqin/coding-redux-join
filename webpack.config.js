@@ -40,31 +40,31 @@ module.exports = {
 		path: path.join(__dirname, 'static'),
 		filename: 'bundle.js'
 	},
-	//module: {
-	//	loaders: [
-	//		{
-	//			test:/\.js?$/,
-	//			exclude:/node_modules/,
-	//			loader:'babel'
-	//			//,
-	//			//query:{
-	//			//	presets:['react','es2015']
-	//			//}
-	//		}
-	//	]
-	//},
 	module: {
-		loaders: [{
-			test: /\.js$/,
-			loader: 'babel',
-			query: babelLoaderQuery,
-			exclude: path.resolve(__dirname, 'node_modules'),
-			include: [
-				path.resolve(__dirname),
-				PROJECT_SRC
-			]
-		}]
+		loaders: [
+			{
+				test:/\.js?$/,
+				exclude:/node_modules/,
+				loader:'babel'
+				//,
+				//query:{
+				//	presets:['react','es2015']
+				//}
+			}
+		]
 	},
+	//module: {
+	//	loaders: [{
+	//		test: /\.js$/,
+	//		loader: 'babel',
+	//		query: babelLoaderQuery,
+	//		exclude: path.resolve(__dirname, 'node_modules'),
+	//		include: [
+	//			path.resolve(__dirname),
+	//			PROJECT_SRC
+	//		]
+	//	}]
+	//},
 	plugins: [
 		// kills the compilation upon an error.
 		// this keeps the outputed bundle **always** valid
