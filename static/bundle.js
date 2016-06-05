@@ -64421,14 +64421,14 @@
 			this.handleRomoveOne = this.handleRomoveOne.bind(this);
 		}
 
-		Joblist.prototype.handleRomoveOne = function handleRomoveOne(event) {
+		Joblist.prototype.handleRomoveOne = function handleRomoveOne(i, event) {
 			console.log(event.target);
-			var key = event.target.getAttribute('data-key');
-			if (!!key) {
-				console.log(key);
-
-				this.props.dispatch(_actionsActions.removeJob(key));
-			}
+			//var key = event.target.getAttribute('data-key');
+			console.log(i);
+			//if (!!key) {
+			//
+			//	//this.props.dispatch(removeJob(key));
+			//}
 
 			//console.log(event._dispatchListeners, event._dispatchIDs);
 		};
@@ -64454,7 +64454,7 @@
 						null,
 						_react2['default'].createElement(
 							_reactBootstrap.Button,
-							{ 'data-key': job.key, onClick: _this.handleRomoveOne },
+							{ 'data-key': job.key, onClick: _this.handleRomoveOne.bind(_this, i) },
 							_react2['default'].createElement(_reactBootstrap.Glyphicon, { glyph: 'remove' })
 						),
 						'  ',
@@ -64652,7 +64652,11 @@
 								)
 							)
 						),
-						_react2['default'].createElement(_reactBootstrap.Col, { xs: 12, md: 6 })
+						_react2['default'].createElement(
+							_reactBootstrap.Col,
+							{ xs: 12, md: 6 },
+							this.jobTitle
+						)
 					)
 				)
 			);

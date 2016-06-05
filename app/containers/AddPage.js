@@ -7,6 +7,11 @@ import * as JobsActions from '../actions/actions';
 
 import { Forms, FormGroup, ControlLabel, FormControl, HelpBlock, Grid, Row, Col, Button} from 'react-bootstrap';
 
+// 校验
+//import Joi from 'joi';
+//import strategy from 'joi-validation-strategy';
+//import validation from 'react-validation-mixin';
+
 
 class AddPage extends Component {
 	constructor(props) {
@@ -15,10 +20,31 @@ class AddPage extends Component {
 			jobTitle: '',
 			jobStatus: ''
 		};
+
+		//this.validatorTypes = {
+		//	jobTitle: Joi.string().alphanum().min(3).max(30).required().label('jobTitle')
+		//	//,
+		//	//password: Joi.string().regex(/[a-zA-Z0-9]{3,30}/).label('Password')
+		//};
+		//this.getValidatorData = this.getValidatorData.bind(this);
+
+		this.validation = {
+			title: '',
+			status: ''
+		}
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleTitleChange = this.handleTitleChange.bind(this);
 		this.handleStatusChange = this.handleStatusChange.bind(this);
 	}
+
+	//getValidatorData() {
+	//	return {
+	//		jobTitle:  this.state.jobTitle//findDOMNode(this.refs.username).value
+	//		//,
+	//		//password: findDOMNode(this.refs.password).value
+	//	};
+	//}
+
 
 	handleSubmit(event) {
 		event.preventDefault();
@@ -35,16 +61,20 @@ class AddPage extends Component {
 	}
 
 	handleTitleChange(event) {
-		if (!!event.target.value) {
-			this.setState({
-				jobTitle: event.target.value
-			});
-			//console.log(this.state.jobTitle);
+		console.log(event.target.getAttribute('placeholder'));
+		this.setState({
+			jobTitle: event.target.value ? event.target.value : event.target.getAttribute('placeholder')
+		});
+
+		if (event.target.value ) {
+
 		}
+
 		//console.log(event.target.value);
 	}
 
 	handleStatusChange(event) {
+
 		if (!!event.target.value) {
 			this.setState({
 				jobStatus: event.target.value
@@ -57,6 +87,11 @@ class AddPage extends Component {
 	render() {
 
 		let {jobs} = this.props;
+		let jobStatusCN = {
+			'0': '请选择职位热度',
+			'new': '热门',
+			'normal': '普通'
+		};
 		//console.log(this);
 		return (
 				<div>
@@ -66,7 +101,7 @@ class AddPage extends Component {
 							<Col xs={12} md={6}>
 								<form onSubmit={this.handleSubmit}>
 									<FormGroup
-											controlId="formBasicText"
+											controlId="formBasicText" validationState="warning"
 									>
 										<ControlLabel>职位名称</ControlLabel>
 										<FormControl
@@ -90,7 +125,10 @@ class AddPage extends Component {
 									</Button>
 								</form>
 							</Col>
-							<Col xs={12} md={6}></Col>
+							<Col xs={12} md={6}>
+								<p>职位名称: {this.state.jobTitle || '请输入职位名称'} </p>
+								<p>职位类型: {jobStatusCN[this.state.jobStatus]}</p>
+							</Col>
 						</Row>
 					</Grid>
 

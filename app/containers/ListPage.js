@@ -26,14 +26,14 @@ class Joblist extends Component {
 
 	}
 
-	handleRomoveOne(event) {
+	handleRomoveOne(i, event) {
 		console.log(event.target);
-		var key = event.target.getAttribute('data-key');
-		if (!!key) {
-			console.log(key);
-
-			this.props.dispatch(removeJob(key));
-		}
+		//var key = event.target.getAttribute('data-key');
+		console.log(i);
+		//if (!!key) {
+		//
+		//	//this.props.dispatch(removeJob(key));
+		//}
 
 		//console.log(event._dispatchListeners, event._dispatchIDs);
 	}
@@ -49,7 +49,7 @@ class Joblist extends Component {
 		const links = jobs.map((job, i) =>
 			<li key={i}>
 
-				<h3><Button data-key={job.key} onClick={this.handleRomoveOne}><Glyphicon glyph="remove" /></Button>{'  '}{job.jobTitle}</h3>
+				<h3><Button data-key={job.key} onClick={this.handleRomoveOne.bind(this, i)}><Glyphicon glyph="remove" /></Button>{'  '}{job.jobTitle}</h3>
 
 				<br/>
 			</li>

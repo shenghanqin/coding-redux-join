@@ -73,7 +73,7 @@ module.exports = {
 		//new webpack.optimize.UglifyJsPlugin({minimize: true}),
 		//new webpack.optimize.CommonsChunkPlugin('vendors', 'vendors.js'),
 		new HtmlWebpackPlugin({
-			title: 'My App',
+			//title: 'My App',
 			filename: '../index.html',
 			template: 'app/index.html',
 			inject: false
