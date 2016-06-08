@@ -1,47 +1,24 @@
 /**
  * Created by hanqin on 16/5/29.
  */
-import React, { Component, PropTypes } from 'react'
+import React, { Component, PropTypes, findDOMNode } from 'react'
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as JobsActions from '../actions/actions';
 
 import { Forms, FormGroup, ControlLabel, FormControl, HelpBlock, Grid, Row, Col, Button} from 'react-bootstrap';
 
-import {reduxForm} from 'redux-form';
-export const fields = [ 'jobTitle', 'jobStatus', 'jobTitleSlug'];
+// export const fields = [ 'jobTitle', 'jobStatus', 'jobTitleSlug'];
 
 // import joi from 'joi';
 import validation from 'react-validation-mixin'; //import the mixin
-// import strategy from 'react-validatorjs-strategy';
+import strategy from 'react-validatorjs-strategy';
 
-const asyncValidate = (values, dispatch) => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-		console.log('values', values);
-		if(!values.jobTitleSlug) {
-			console.log(  values.jobTitle.toUpperCase());
-        	// reject({'jobTitle':  values.jobTitle.toUpperCase()})
-        	resolve({'jobTitle': values.jobTitle.toUpperCase()})
-		} else {
-		}
-    }, 1000) // simulate server latency
-  })
-}
+import ReactDOM from 'react-dom';
+import ReactMarkdown from 'react-markdown';
 
-
-const validate = values => {
-	const errors = {}
-	if (!values.jobTitle) {
-		errors.jobTitle = '必填'
-	} else if (values.jobTitle.length > 15) {
-		errors.jobTitle = '职位名称不能超过20个字'
-	}
-
-	if (!values.jobStatus) {
-		errors.jobStatus = '请选择职位热度'
-	}
-	return errors
-}
+// 拼音转换
+import pinyin from 'pinyin';
 
 class AddPage extends Component {
 	constructor(props) {
@@ -52,80 +29,181 @@ class AddPage extends Component {
 			jobStatus: ''
 		};
 
+		this.validatorTypes = strategy.createSchema(
+			// First parameter is a list of rules for each element name
+			{
+				jobTitle: 'required|min:3|max:20',
+				jobTitleSlug: 'required|min:3|max:20',
+				jobStatus: 'required',
+				jobContent: 'required|min:3'
+			},
+			// Second parameter is optional and is a list of custom error messages for elements
+			{
+				"required.jobTitle": "职位名称必填",
+				"min.jobTitle": "职位名称长度不小于3字，不超过20个字",
+				"max.jobTitle": "职位名称长度不小于3字，不超过20个字",
+				"required.jobTitleSlug": "职位名称拼音必填",
+				"min.jobTitleSlug": "职位名称拼音长度不小于3字，不超过20个字",
+				"max.jobTitleSlug": "职位名称拼音长度不小于3字，不超过20个字",
+				"required.jobStatus": "职位状态必选",
+				"required.jobContent": "职位内容必填",
+				"min.jobContent": "职位内容不得少于三个字"
+			}
+		);
+
+		this.getValidatorData = this.getValidatorData.bind(this);
 		this.handleSubmitMe = this.handleSubmitMe.bind(this);
-		// this.handleTitleChange = this.handleTitleChange.bind(this);
-		// this.handleStatusChange = this.handleStatusChange.bind(this);
+		this.activateValidation = this.activateValidation.bind(this);
+		// this.handleChange = this.handleChange.bind(this);
+		this.handleTitleBlur = this.handleTitleBlur.bind(this);
+		this.resetForm = this.resetForm.bind(this);
+	}
+
+	resetForm() {
+		findDOMNode(this.refs.jobTitle).value = '';
+		findDOMNode(this.refs.jobTitleSlug).value = '';
+		findDOMNode(this.refs.jobStatus).value = '';
+		findDOMNode(this.refs.jobContent).value = '';
+	}
+	getValidatorData() {
+		return {
+			jobTitle: findDOMNode(this.refs.jobTitle).value,
+			jobTitleSlug: findDOMNode(this.refs.jobTitleSlug).value,
+			jobStatus: findDOMNode(this.refs.jobStatus).value,
+			jobContent: findDOMNode(this.refs.jobContent).value
+		}
 	}
 
 
-	handleSubmitMe(job) {
-		console.log(job);
-		const { dispatch } = this.props;
-			dispatch(JobsActions.createJob(job));
+	handleSubmitMe(event) {
+		var self = this;
+		event.preventDefault();
+		
+		// var 
+		console.log(this.getValidatorData());
+		
+		this.props.validate(function (error) {
+			if (!error) {
+				// console.log(this.refs);
+				console.log('提交表单');
+				console.log(self.props);
+				const { dispatch } = self.props;
+				self.props.createJob(self.getValidatorData());
+				self.resetForm();
+				// Submit the data
+				// console.log(job);
+			}
+		})
 
 	}
 
-	handleTitleChange(event) {
-		console.log('handleTitleChange');
-		console.log(this.props.fields.jobTitle);
+	handleTitleBlur(event) {
+		let _jobTitleSlug = findDOMNode(this.refs.jobTitleSlug).value;
+		if(!_jobTitleSlug) {
+			var jobTitlePinyinArr = pinyin(findDOMNode(this.refs.jobTitle).value, {
+				style: pinyin.STYLE_NORMAL,
+				segment: true
+			});
+			var jobTitlePinyin = jobTitlePinyinArr.map((v, i)=> v[0].trim()).join('-').toLowerCase();
+			findDOMNode(this.refs.jobTitleSlug).value = jobTitlePinyin;
+		}
+		// console.log(this.props.fields.jobTitle);
+		// console.log();
+		this.props.handleValidation(event.target.name)(event);
 	}
+
+	activateValidation(e) {
+		strategy.activateRule(this.validatorTypes, e.target.name);
+		this.props.handleValidation(e.target.name)(e);
+	}
+	/**
+	 * Set the state of the changed variable and then when set, call validator
+	 *
+	 * @param {Event} e
+	 */
+	// handleChange(e) {
+	// 	var state = {};
+	// 	state[e.target.name] = e.target.value;
+
+	// 	this.setState(state, () => {
+	// 		this.props.handleValidation(e.target.name)(e);
+	// 	});
+	// }
 
 	render() {
 
 		let {jobs} = this.props;
-		const { fields: { jobTitle, jobStatus, jobTitleSlug }, resetForm, handleSubmit, submitting, asyncValidating } = this.props;
-		console.log('this.props', this.props);
 		let jobStatusCN = {
 			'0': '请选择职位热度',
 			'new': '热门',
 			'normal': '普通'
 		};
+		function renderValidationState(messages) {
+            if (messages.length) {
+
+                return 'warning';
+            }
+        }
 		return (
 				<div>
 					<Grid>
-						<p>123-{asyncValidating == 'jobTitle' && <i>32423</i>} - {asyncValidating}</p>
-						<h1 className='page-header' onClick={this.handleClick}>新增职位 </h1>
+						<p>123-{ <i>32423</i>} - </p>
+						<h1 className='page-header'>新增职位 </h1>
 						<Row className="show-grid">
 							<Col xs={12} md={6}>
-								<form onSubmit={handleSubmit(this.handleSubmitMe.bind(this))}>
+								<form onSubmit={this.handleSubmitMe.bind(this)}>
 									<FormGroup
-											controlId="jobTitle" validationState={jobTitle.touched && jobTitle.error && 'warning'}
+											controlId="jobTitle" validationState={renderValidationState(this.props.getValidationMessages('jobTitle'))}
 									>
 										<ControlLabel>职位名称</ControlLabel>
 										<FormControl
 												type="text"
+												ref="jobTitle"
 												placeholder="请输入职位名称"
-												 {...jobTitle}
+												onBlur={this.handleTitleBlur.bind(this)}
 										/>
 										<FormControl.Feedback />
-										{jobTitle.touched && jobTitle.error && <HelpBlock>{jobTitle.error}</HelpBlock>}
+										<HelpBlock>{this.props.getValidationMessages('jobTitle')} </HelpBlock>
 									</FormGroup>
-									<FormGroup>
+									<FormGroup controlId="jobTitleSlug" validationState={renderValidationState(this.props.getValidationMessages('jobTitleSlug'))}>
 										<ControlLabel>职称拼音</ControlLabel>
 										<FormControl
-												type="text"
-												placeholder="请输入职称拼音"
-												 {...jobTitleSlug}
+											type="text"
+											placeholder="职称拼音"
+											name="jobTitleSlug"
+											ref='jobTitleSlug'
+											onBlur={this.activateValidation}
 										/>
+										<FormControl.Feedback />
+										<HelpBlock>{this.props.getValidationMessages('jobTitleSlug')}</HelpBlock>
 									</FormGroup>
-									<FormGroup controlId="jobStatus"  validationState={jobStatus.touched && jobStatus.error && 'warning'}>
+									<FormGroup controlId="jobStatus"  validationState={renderValidationState(this.props.getValidationMessages('jobStatus'))}>
 										<ControlLabel>职位热度</ControlLabel>
-										<FormControl componentClass="select" placeholder="" {...jobStatus}>
+										<FormControl componentClass="select" ref="jobStatus" placeholder="" onBlur={this.activateValidation}>
 											<option value="">请选择职位热度...</option>
 											<option value="new">热门</option>
 											<option value="normal">普通</option>
 										</FormControl>
-										{jobStatus.touched && jobStatus.error && <HelpBlock>{jobStatus.error}</HelpBlock>}
+										<FormControl.Feedback />
+										<HelpBlock>{this.props.getValidationMessages('jobStatus')}</HelpBlock>
 									</FormGroup>
+									<FormGroup controlId="jobContent"  validationState={renderValidationState(this.props.getValidationMessages('jobContent'))}>
+										<ControlLabel>职位内容</ControlLabel>
+										<FormControl componentClass="textarea" placeholder="请输入职位内容" ref="jobContent" onBlur={this.activateValidation}/>
+										<HelpBlock>{this.props.getValidationMessages('jobContent')}</HelpBlock>
+										<FormControl.Feedback />
+									</FormGroup>
+
 									<Button type="submit" >
 										&nbsp;&nbsp;提交&nbsp;&nbsp;
 									</Button>
 								</form>
 							</Col>
 							<Col xs={12} md={6}>
-								<p>职位名称: {jobTitle.value || '请输入职位名称'} </p>
-								<p>职位拼音: {jobTitleSlug.value}</p>
-								<p>职位类型: {jobStatusCN[jobStatus.value]}</p>
+								<p>职位名称：{this.refs.jobTitle && findDOMNode(this.refs.jobTitle).value}</p>
+								<p>职位状态：{this.refs.jobStatus && jobStatusCN[findDOMNode(this.refs.jobStatus).value]}</p>
+								{this.refs.jobContent && findDOMNode(this.refs.jobContent).value}
+								<p>----></p>
 							</Col>
 						</Row>
 					</Grid>
@@ -141,10 +219,11 @@ function mapStateToProps(state) {
 		jobs: state.jobs
 	}
 }
-export default connect(mapStateToProps)(reduxForm({
-	form: 'addValidation',
-	fields,
-	validate,
-	asyncValidate,
-	asyncBlurFields: ['jobTitle', 'jobTitleSlug']
-})(AddPage));
+
+//将action的所有方法绑定到props上
+function mapDispatchToProps (dispatch) {
+	return bindActionCreators(JobsActions, dispatch);
+}
+export default connect(mapStateToProps, mapDispatchToProps)( validation(strategy)(AddPage) );
+// export default validation(strategy)(connect(mapStateToProps)( AddPage) );
+// export default validation(strategy)(connect(mapStateToProps)( AddPage) );
