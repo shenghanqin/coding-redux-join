@@ -28,12 +28,11 @@ class Joblist extends Component {
 
 	handleRomoveOne(i, event) {
 		console.log(event.target);
-		//var key = event.target.getAttribute('data-key');
 		console.log(i);
-		//if (!!key) {
-		//
-		//	//this.props.dispatch(removeJob(key));
-		//}
+		// var key = i.getAttribute('data-key');
+		// if (!!key) {
+			this.props.dispatch(removeJob(this.props.jobs[i].key));
+		// }
 
 		//console.log(event._dispatchListeners, event._dispatchIDs);
 	}

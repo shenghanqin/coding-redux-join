@@ -7,118 +7,115 @@ import * as JobsActions from '../actions/actions';
 
 import { Forms, FormGroup, ControlLabel, FormControl, HelpBlock, Grid, Row, Col, Button} from 'react-bootstrap';
 
-// 校验
-//import Joi from 'joi';
-//import strategy from 'joi-validation-strategy';
-//import validation from 'react-validation-mixin';
+import {reduxForm} from 'redux-form';
+export const fields = [ 'jobTitle', 'jobStatus', 'jobTitleSlug'];
 
+// import joi from 'joi';
+import validation from 'react-validation-mixin'; //import the mixin
+// import strategy from 'react-validatorjs-strategy';
+
+const asyncValidate = (values, dispatch) => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+		console.log('values', values);
+		if(!values.jobTitleSlug) {
+			console.log(  values.jobTitle.toUpperCase());
+        	// reject({'jobTitle':  values.jobTitle.toUpperCase()})
+        	resolve({'jobTitle': values.jobTitle.toUpperCase()})
+		} else {
+		}
+    }, 1000) // simulate server latency
+  })
+}
+
+
+const validate = values => {
+	const errors = {}
+	if (!values.jobTitle) {
+		errors.jobTitle = '必填'
+	} else if (values.jobTitle.length > 15) {
+		errors.jobTitle = '职位名称不能超过20个字'
+	}
+
+	if (!values.jobStatus) {
+		errors.jobStatus = '请选择职位热度'
+	}
+	return errors
+}
 
 class AddPage extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			jobTitle: '',
+			jobTitleSlug: '',
 			jobStatus: ''
 		};
 
-		//this.validatorTypes = {
-		//	jobTitle: Joi.string().alphanum().min(3).max(30).required().label('jobTitle')
-		//	//,
-		//	//password: Joi.string().regex(/[a-zA-Z0-9]{3,30}/).label('Password')
-		//};
-		//this.getValidatorData = this.getValidatorData.bind(this);
-
-		this.validation = {
-			title: '',
-			status: ''
-		}
-		this.handleSubmit = this.handleSubmit.bind(this);
-		this.handleTitleChange = this.handleTitleChange.bind(this);
-		this.handleStatusChange = this.handleStatusChange.bind(this);
+		this.handleSubmitMe = this.handleSubmitMe.bind(this);
+		// this.handleTitleChange = this.handleTitleChange.bind(this);
+		// this.handleStatusChange = this.handleStatusChange.bind(this);
 	}
 
-	//getValidatorData() {
-	//	return {
-	//		jobTitle:  this.state.jobTitle//findDOMNode(this.refs.username).value
-	//		//,
-	//		//password: findDOMNode(this.refs.password).value
-	//	};
-	//}
 
-
-	handleSubmit(event) {
-		event.preventDefault();
+	handleSubmitMe(job) {
+		console.log(job);
 		const { dispatch } = this.props;
-		//console.log(this.state.jobTitle);
-		//console.log(typeof  dispatch, this.props);
-		//console.log(this.state);
-		dispatch(JobsActions.createJob(this.state));
+			dispatch(JobsActions.createJob(job));
 
-		this.setState({
-			jobTitle: '',
-			jobStatus: ''
-		});
 	}
 
 	handleTitleChange(event) {
-		console.log(event.target.getAttribute('placeholder'));
-		this.setState({
-			jobTitle: event.target.value ? event.target.value : event.target.getAttribute('placeholder')
-		});
-
-		if (event.target.value ) {
-
-		}
-
-		//console.log(event.target.value);
-	}
-
-	handleStatusChange(event) {
-
-		if (!!event.target.value) {
-			this.setState({
-				jobStatus: event.target.value
-			});
-			//console.log(this.state.jobTitle);
-		}
-		console.log(event.target.value);
+		console.log('handleTitleChange');
+		console.log(this.props.fields.jobTitle);
 	}
 
 	render() {
 
 		let {jobs} = this.props;
+		const { fields: { jobTitle, jobStatus, jobTitleSlug }, resetForm, handleSubmit, submitting, asyncValidating } = this.props;
+		console.log('this.props', this.props);
 		let jobStatusCN = {
 			'0': '请选择职位热度',
 			'new': '热门',
 			'normal': '普通'
 		};
-		//console.log(this);
 		return (
 				<div>
 					<Grid>
-						<h1 className='page-header' onClick={this.handleClick}>新增职位</h1>
+						<p>123-{asyncValidating == 'jobTitle' && <i>32423</i>} - {asyncValidating}</p>
+						<h1 className='page-header' onClick={this.handleClick}>新增职位 </h1>
 						<Row className="show-grid">
 							<Col xs={12} md={6}>
-								<form onSubmit={this.handleSubmit}>
+								<form onSubmit={handleSubmit(this.handleSubmitMe.bind(this))}>
 									<FormGroup
-											controlId="formBasicText" validationState="warning"
+											controlId="jobTitle" validationState={jobTitle.touched && jobTitle.error && 'warning'}
 									>
 										<ControlLabel>职位名称</ControlLabel>
 										<FormControl
 												type="text"
 												placeholder="请输入职位名称"
-												onChange={this.handleTitleChange}
+												 {...jobTitle}
 										/>
 										<FormControl.Feedback />
-										<HelpBlock>Validation is based on string length.</HelpBlock>
+										{jobTitle.touched && jobTitle.error && <HelpBlock>{jobTitle.error}</HelpBlock>}
 									</FormGroup>
-									<FormGroup controlId="formControlsSelect">
+									<FormGroup>
+										<ControlLabel>职称拼音</ControlLabel>
+										<FormControl
+												type="text"
+												placeholder="请输入职称拼音"
+												 {...jobTitleSlug}
+										/>
+									</FormGroup>
+									<FormGroup controlId="jobStatus"  validationState={jobStatus.touched && jobStatus.error && 'warning'}>
 										<ControlLabel>职位热度</ControlLabel>
-										<FormControl componentClass="select" placeholder="" onChange={this.handleStatusChange}>
-											<option value="0">请选择职位热度...</option>
+										<FormControl componentClass="select" placeholder="" {...jobStatus}>
+											<option value="">请选择职位热度...</option>
 											<option value="new">热门</option>
-											<option value="old">普通</option>
+											<option value="normal">普通</option>
 										</FormControl>
+										{jobStatus.touched && jobStatus.error && <HelpBlock>{jobStatus.error}</HelpBlock>}
 									</FormGroup>
 									<Button type="submit" >
 										&nbsp;&nbsp;提交&nbsp;&nbsp;
@@ -126,8 +123,9 @@ class AddPage extends Component {
 								</form>
 							</Col>
 							<Col xs={12} md={6}>
-								<p>职位名称: {this.state.jobTitle || '请输入职位名称'} </p>
-								<p>职位类型: {jobStatusCN[this.state.jobStatus]}</p>
+								<p>职位名称: {jobTitle.value || '请输入职位名称'} </p>
+								<p>职位拼音: {jobTitleSlug.value}</p>
+								<p>职位类型: {jobStatusCN[jobStatus.value]}</p>
 							</Col>
 						</Row>
 					</Grid>
@@ -135,18 +133,18 @@ class AddPage extends Component {
 
 				</div>
 		)
-
-
-		console.log(jobs);
 	}
 }
 
 function mapStateToProps(state) {
-
 	return {
 		jobs: state.jobs
 	}
 }
-
-
-export default connect(mapStateToProps)(AddPage);
+export default connect(mapStateToProps)(reduxForm({
+	form: 'addValidation',
+	fields,
+	validate,
+	asyncValidate,
+	asyncBlurFields: ['jobTitle', 'jobTitleSlug']
+})(AddPage));
