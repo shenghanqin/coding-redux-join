@@ -40,6 +40,7 @@ export default {
     alias: {
       'redux-router': PROJECT_SRC
     },
+    // 指定被引入文件的后缀
     extensions: ['', '.js']
   }
 };

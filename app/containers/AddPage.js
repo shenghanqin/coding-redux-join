@@ -15,7 +15,11 @@ import validation from 'react-validation-mixin'; //import the mixin
 import strategy from 'react-validatorjs-strategy';
 
 import ReactDOM from 'react-dom';
-import ReactMarkdown from 'react-markdown';
+import marked from 'marked';
+
+// import Editor from 'react-md-editor';
+// import 'react-md-editor/dist/component.less';
+// var css = require("!css!less!react-md-editor/dist/component.less");
 
 // 拼音转换
 import pinyin from 'pinyin';
@@ -24,9 +28,8 @@ class AddPage extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			jobTitle: '',
-			jobTitleSlug: '',
-			jobStatus: ''
+			jobContentHTML: '',
+			jobContent: ''
 		};
 
 		this.validatorTypes = strategy.createSchema(
@@ -57,6 +60,7 @@ class AddPage extends Component {
 		// this.handleChange = this.handleChange.bind(this);
 		this.handleTitleBlur = this.handleTitleBlur.bind(this);
 		this.resetForm = this.resetForm.bind(this);
+		this.handleContentChange = this.handleContentChange.bind(this);
 	}
 
 	resetForm() {
@@ -115,6 +119,16 @@ class AddPage extends Component {
 	activateValidation(e) {
 		strategy.activateRule(this.validatorTypes, e.target.name);
 		this.props.handleValidation(e.target.name)(e);
+	}
+
+	handleContentChange(event) {
+		console.log(event);
+		var rawMarkup = marked(event.target.value, {sanitize: true});
+        // return {__html: rawMarkup};
+		console.log(rawMarkup);
+		this.setState({
+			jobContentHTML: rawMarkup
+		})
 	}
 	/**
 	 * Set the state of the changed variable and then when set, call validator
@@ -189,10 +203,11 @@ class AddPage extends Component {
 									</FormGroup>
 									<FormGroup controlId="jobContent"  validationState={renderValidationState(this.props.getValidationMessages('jobContent'))}>
 										<ControlLabel>职位内容</ControlLabel>
-										<FormControl componentClass="textarea" placeholder="请输入职位内容" ref="jobContent" onBlur={this.activateValidation}/>
+										<FormControl componentClass="textarea" placeholder="请输入职位内容" ref="jobContent" onBlur={this.activateValidation} onChange={this.handleContentChange.bind(this)}/>
 										<HelpBlock>{this.props.getValidationMessages('jobContent')}</HelpBlock>
 										<FormControl.Feedback />
 									</FormGroup>
+
 
 									<Button type="submit" >
 										&nbsp;&nbsp;提交&nbsp;&nbsp;
@@ -202,8 +217,10 @@ class AddPage extends Component {
 							<Col xs={12} md={6}>
 								<p>职位名称：{this.refs.jobTitle && findDOMNode(this.refs.jobTitle).value}</p>
 								<p>职位状态：{this.refs.jobStatus && jobStatusCN[findDOMNode(this.refs.jobStatus).value]}</p>
-								{this.refs.jobContent && findDOMNode(this.refs.jobContent).value}
-								<p>----></p>
+								<br />
+								<h3>职位内容：</h3>
+								<hr />
+								<div dangerouslySetInnerHTML={{__html: this.state.jobContentHTML}} />
 							</Col>
 						</Row>
 					</Grid>

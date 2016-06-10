@@ -4,7 +4,9 @@ import { Provider, connect } from 'react-redux';
 
 import {Grid, Button, Glyphicon} from 'react-bootstrap';
 
-import { getJobs, removeJob} from '../actions/actions'
+import { getJobs, removeJob} from '../actions/actions';
+
+import marked from 'marked';
 
 const mapStateToProps = (state) => {
 	return {
@@ -22,6 +24,7 @@ class Joblist extends Component {
 		this.props.dispatch(getJobs());
 
 		this.handleRomoveOne = this.handleRomoveOne.bind(this);
+		this.hanndleMarked = this.hanndleMarked.bind(this);
 
 
 	}
@@ -36,6 +39,15 @@ class Joblist extends Component {
 
 		//console.log(event._dispatchListeners, event._dispatchIDs);
 	}
+
+	hanndleMarked (content) {
+		if (!!content) {
+			return marked(content, {sanitize: true});
+		}
+		return '';
+	}
+
+	// <div dangerouslySetInnerHTML={{__html: marked(job.jobContent, {sanitize: true})}} />
 	render() {
 		let {jobs} = this.props;
 		let statusCN = {
@@ -46,11 +58,12 @@ class Joblist extends Component {
 		//getStatusCN
 		// Display is only used for rendering, its not a property of <Link>
 		const links = jobs.map((job, i) =>
+			
 			<li key={i}>
 
 				<h3><Button data-key={job.key} onClick={this.handleRomoveOne.bind(this, i)}><Glyphicon glyph="remove" /></Button>{'  '}{job.jobTitle}</h3>
-
-				<br/>
+				 <div dangerouslySetInnerHTML={{__html: this.hanndleMarked(job.jobContent)}} />
+				<hr/>
 			</li>
 		);
 		return (
