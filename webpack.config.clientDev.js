@@ -18,7 +18,8 @@ const clientDevConfig = mergeConfig(baseConfig, {
     path: path.resolve(__dirname, 'build'),
     filename: 'bundle.js',
     publicPath: '/static/'
-  },
+  }
+  ,
   // 插件？
   plugins: [
     new HotModuleReplacementPlugin(),

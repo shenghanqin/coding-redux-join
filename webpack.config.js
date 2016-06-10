@@ -50,7 +50,9 @@ module.exports = {
 				//query:{
 				//	presets:['react','es2015']
 				//}
-			}
+			},
+    		{test: /\.css$/, loader: 'style!css'},
+    		{ test: /\.jpe?g$|\.gif$|\.png$|\.svg$|\.woff$|\.ttf$|\.wav$|\.mp3$/, loader: "file-loader" }
 		]
 	},
 	//module: {
@@ -78,6 +80,9 @@ module.exports = {
 			template: 'app/index.html',
 			inject: false
 		})
-	]
+	],
+	resolve: {
+        extensions: ['', '.js', '.jsx', '.css']
+    }
 };
 

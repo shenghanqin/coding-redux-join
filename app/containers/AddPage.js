@@ -18,7 +18,8 @@ import ReactDOM from 'react-dom';
 import marked from 'marked';
 
 // import Editor from 'react-md-editor';
-// import 'react-md-editor/dist/component.less';
+import 'react-md-editor/dist/react-md-editor.css';
+// var css = required('react-md-editor/dist/react-md-editor.css');
 // var css = require("!css!less!react-md-editor/dist/component.less");
 
 // 拼音转换

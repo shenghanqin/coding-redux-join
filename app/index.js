@@ -12,4 +12,6 @@ import { createHistory } from 'history';
 
 // 自定义
 import Root from './components/Root';
+
+import 'react-md-editor/dist/react-md-editor.css';
 ReactDOM.render(<Root />, document.getElementById('root'));

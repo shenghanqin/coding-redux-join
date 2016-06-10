@@ -34,7 +34,8 @@ export default {
         path.resolve(__dirname),
         PROJECT_SRC
       ]
-    }]
+    },
+    {test: /\.css$/, loader: 'style!css'}]
   },
   resolve: {
     alias: {
