@@ -15,9 +15,9 @@ const mapStateToProps = (state) => {
 };
 
 class Joblist extends Component {
-	static propTypes = {
-		children: PropTypes.node
-	};
+	// static propTypes = {
+	// 	children: PropTypes.node
+	// };
 
 	constructor(props) {
 		super(props);
@@ -30,14 +30,11 @@ class Joblist extends Component {
 	}
 
 	handleRomoveOne(i, event) {
-		console.log(event.target);
-		console.log(i);
 		// var key = i.getAttribute('data-key');
 		// if (!!key) {
 			this.props.dispatch(removeJob(this.props.jobs[i].key));
 		// }
 
-		//console.log(event._dispatchListeners, event._dispatchIDs);
 	}
 
 	hanndleMarked (content) {

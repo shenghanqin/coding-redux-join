@@ -14,7 +14,6 @@ const appHistory = useRouterHistory(createHashHistory)({ queryKey: false })
 
 
 
-
 import App from './App';
 import Parent from './Parent';
 import Child from './Child';
@@ -30,25 +29,25 @@ const store = configureStore();
 store.dispatch(registerListeners());
 
 class Root extends Component {
-	render() {
-		return (
-				<div>
-					<Provider store={store}>
-						<Router history={appHistory}>
-							<Route path="/" component={App} >
-								<IndexRedirect to='jobs' />
-								<Route path="jobs" component={Joblist}></Route>
-								<Route path="add" component={AddPage}></Route>
-							</Route>
-						</Router>
+    render() {
+        return (
+                <div>
+                    <Provider store={store}>
+                        <Router history={appHistory}>
+                            <Route path="/" component={App} >
+                                <IndexRedirect to='jobs' />
+                                <Route path="jobs" component={Joblist}></Route>
+                                <Route path="add" component={AddPage}></Route>
+                            </Route>
+                        </Router>
 
-					</Provider>
-					<DebugPanel top right bottom>
-						<DevTools store={store} monitor={LogMonitor} />
-					</DebugPanel>
-				</div>
-		);
-	}
+                    </Provider>
+                    <DebugPanel top right bottom>
+                        <DevTools store={store} monitor={LogMonitor} />
+                    </DebugPanel>
+                </div>
+        );
+    }
 };
 
 

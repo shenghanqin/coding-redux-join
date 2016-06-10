@@ -9,11 +9,21 @@ import * as JobsActions from '../actions/actions';
 
 import { Nav, Navbar, NavItem, NavDropdown, MenuItem} from 'react-bootstrap';
 
-@connect((state) => ({}))
+
+// TODO 这里可能确实state
+// @connect((state) => ({}))
+function mapStateToProps(state) {
+  return {};
+}
+
+// function mapDispatchToProps(dispatch) {
+//   return { actions: bindActionCreators(actionCreators, dispatch) };
+// }
+
 class App extends Component {
-	static propTypes = {
-		children: PropTypes.node
-	}
+	// static propTypes = {
+	// 	children: PropTypes.node
+	// }
 
 	constructor(props) {
 		super(props);
@@ -23,7 +33,6 @@ class App extends Component {
 	handleClick(event) {
 		event.preventDefault();
 		const { dispatch } = this.props;
-		console.log(typeof  dispatch, this.props);
 		dispatch(JobsActions.createJob('Abcde' + Math.random()));
 
 	}
@@ -68,4 +77,8 @@ class App extends Component {
 	}
 }
 
-export default App;
+
+App.propTypes = {
+		children: PropTypes.node
+	}
+export default connect(mapStateToProps)(App);

@@ -6,7 +6,7 @@ var gulp = require('gulp'),
 // 定义 webserver 任务
 gulp.task('webserver', function() {
     connect.server({
-        port: 1234,
+        port: 80,
         root: '../',
         livereload: true
     });

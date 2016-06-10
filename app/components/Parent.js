@@ -1,9 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 
-export  default class Parent extends Component {
-	static propTypes = {
-		children: PropTypes.node
-	}
+class Parent extends Component {
+	// static propTypes = {
+	// 	children: PropTypes.node
+	// }
 
 	render() {
 		return (
@@ -14,3 +14,9 @@ export  default class Parent extends Component {
 		);
 	}
 }
+
+Parent.propTypes = {
+		children: PropTypes.node
+	}
+
+export  default Parent

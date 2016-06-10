@@ -1,10 +1,12 @@
 /**
  * Created by hanqin on 16/5/29.
  */
-import React, { Component, PropTypes, findDOMNode } from 'react'
+import React, { Component, PropTypes } from 'react'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as JobsActions from '../actions/actions';
+
+import { findDOMNode } from 'react-dom'
 
 import { Forms, FormGroup, ControlLabel, FormControl, HelpBlock, Grid, Row, Col, Button} from 'react-bootstrap';
 
@@ -83,20 +85,12 @@ class AddPage extends Component {
 	handleSubmitMe(event) {
 		var self = this;
 		event.preventDefault();
-		
-		// var 
-		console.log(this.getValidatorData());
-		
 		this.props.validate(function (error) {
 			if (!error) {
-				// console.log(this.refs);
-				console.log('提交表单');
-				console.log(self.props);
 				const { dispatch } = self.props;
 				self.props.createJob(self.getValidatorData());
 				self.resetForm();
 				// Submit the data
-				// console.log(job);
 			}
 		})
 
@@ -112,8 +106,6 @@ class AddPage extends Component {
 			var jobTitlePinyin = jobTitlePinyinArr.map((v, i)=> v[0].trim()).join('-').toLowerCase();
 			findDOMNode(this.refs.jobTitleSlug).value = jobTitlePinyin;
 		}
-		// console.log(this.props.fields.jobTitle);
-		// console.log();
 		this.props.handleValidation(event.target.name)(event);
 	}
 
@@ -123,10 +115,8 @@ class AddPage extends Component {
 	}
 
 	handleContentChange(event) {
-		console.log(event);
 		var rawMarkup = marked(event.target.value, {sanitize: true});
         // return {__html: rawMarkup};
-		console.log(rawMarkup);
 		this.setState({
 			jobContentHTML: rawMarkup
 		})
@@ -217,11 +207,11 @@ class AddPage extends Component {
 							</Col>
 							<Col xs={12} md={6}>
 								<p>职位名称：{this.refs.jobTitle && findDOMNode(this.refs.jobTitle).value}</p>
-								<p>职位状态：{this.refs.jobStatus && jobStatusCN[findDOMNode(this.refs.jobStatus).value]}</p>
-								<br />
-								<h3>职位内容：</h3>
-								<hr />
-								<div dangerouslySetInnerHTML={{__html: this.state.jobContentHTML}} />
+                                <p>职位状态：{this.refs.jobStatus && jobStatusCN[findDOMNode(this.refs.jobStatus).value]}</p>
+                                <br />
+                                <h3>职位内容：</h3>
+                                <hr />
+                                <div dangerouslySetInnerHTML={{__html: this.state.jobContentHTML}} />
 							</Col>
 						</Row>
 					</Grid>
