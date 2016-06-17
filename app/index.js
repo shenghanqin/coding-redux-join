@@ -1,4 +1,4 @@
-import '../style.css';// 载入 style.css
+// import '../style.css';// 载入 style.css
 import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import { createStore, compose, combineReducers } from 'redux';
