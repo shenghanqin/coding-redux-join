@@ -36,7 +36,7 @@ module.exports = {
     //  vendors: ['react','redux', 'redux-router']
     //},
     // entry: ['react','redux', 'redux-router', path.join(__dirname, 'app')],
-    entry: './app/index',
+    entry: path.join(__dirname, 'app'),
 
     output: {
         path: path.join(__dirname, 'build'),
@@ -80,7 +80,7 @@ module.exports = {
             //title: 'My App',
             filename: '../index.html',
             template: 'app/index.html',
-            inject: false
+            inject: true
         })
     ],
     resolve: {

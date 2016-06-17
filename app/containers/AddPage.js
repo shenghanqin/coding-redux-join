@@ -19,7 +19,9 @@ import strategy from 'react-validatorjs-strategy';
 import ReactDOM from 'react-dom';
 import marked from 'marked';
 
-// import Editor from 'react-md-editor';
+import Editor from 'react-md-editor';
+import 'codemirror/lib/codemirror.js';
+import 'codemirror/lib/codemirror.css';
 import 'react-md-editor/dist/react-md-editor.css';
 // var css = required('react-md-editor/dist/react-md-editor.css');
 // var css = require("!css!less!react-md-editor/dist/component.less");
@@ -64,6 +66,7 @@ class AddPage extends Component {
 		this.handleTitleBlur = this.handleTitleBlur.bind(this);
 		this.resetForm = this.resetForm.bind(this);
 		this.handleContentChange = this.handleContentChange.bind(this);
+		this.updateCode = this.updateCode.bind(this);
 	}
 
 	resetForm() {
@@ -121,6 +124,13 @@ class AddPage extends Component {
 			jobContentHTML: rawMarkup
 		})
 	}
+
+	updateCode(text) {
+		// console.log(event)
+		this.setState({
+			jobContent: text
+		})
+	}
 	/**
 	 * Set the state of the changed variable and then when set, call validator
 	 *
@@ -152,7 +162,7 @@ class AddPage extends Component {
 		return (
 				<div>
 					<Grid>
-						<p>123-{ <i>32423</i>} - </p>
+						
 						<h1 className='page-header'>新增职位 </h1>
 						<Row className="show-grid">
 							<Col xs={12} md={6}>
@@ -199,7 +209,7 @@ class AddPage extends Component {
 										<FormControl.Feedback />
 									</FormGroup>
 
-
+									<Editor value={this.state.jobContent} onChange={this.updateCode.bind(this)} />
 									<Button type="submit" >
 										&nbsp;&nbsp;提交&nbsp;&nbsp;
 									</Button>
